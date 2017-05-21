@@ -13,7 +13,7 @@
 - precision: specified by `_low` and `_full` at the end of filename
 
 ### Result
-- low precision: 8.29% error rate
+- low precision: 8.24% error rate
 - full precision: 7.94% error rate
 
 ### Instruction for re-running
