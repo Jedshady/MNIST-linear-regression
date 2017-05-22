@@ -28,7 +28,7 @@ def testProc():
 
     train_epoch = 10
     train_minibatch = 150
-    precision = '_g5w5'
+    precision = '_g32w5'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
