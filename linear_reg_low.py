@@ -28,7 +28,7 @@ def testProc():
 
     train_epoch = 10
     train_minibatch = 150
-    precision = '_low'
+    precision = '_g5w5'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
@@ -125,7 +125,7 @@ def trainProc():
     m_bt = np.zeros((1,K))
     v_bt = m_bt
 
-    precision = '_full'
+    precision = '_g5w5'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
 
@@ -171,10 +171,18 @@ def trainProc():
             dW, db, loss_temp= train(labels, images, W_low, b_low, minibatch_size)
             loss += loss_temp  # accumulate loss
 
+            # reduce precision of gradients
+            dW_low = to_low_pcs(dW, 5)
+            db_low = to_low_pcs(db, 5)
+
+            # update parameter with low precision gradients
+            W, m_wt, v_wt = adam(W, dW_low, learning_rate, m_wt, v_wt, (start_max / minibatch_size)*i+(start/minibatch_size))
+            b, m_bt, v_bt = adam(b, db_low, learning_rate, m_bt, v_bt, (start_max / minibatch_size)*i+(start/minibatch_size))
+
             # perform a parameter update;
             # simulate on the server side
-            W, m_wt, v_wt = adam(W, dW, learning_rate, m_wt, v_wt, (start_max / minibatch_size)*i+(start/minibatch_size))
-            b, m_bt, v_bt = adam(b, db, learning_rate, m_bt, v_bt, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # W, m_wt, v_wt = adam(W, dW, learning_rate, m_wt, v_wt, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b, m_bt, v_bt = adam(b, db, learning_rate, m_bt, v_bt, (start_max / minibatch_size)*i+(start/minibatch_size))
 
             # Change W and b to low precision; simulate on the server side
             W_low = to_low_pcs(W, 5)

@@ -2,6 +2,7 @@
 #epoch number: 10
 #minibatch size: 150
 #precision type: low precision
+#communication: 1.1618e9 bits
 ###########################################
 epoch  1 : iteration   20 : loss 1.967193
 epoch  1 : iteration   40 : loss 1.436791

@@ -10,11 +10,12 @@
 - total training data points: 60000
 - epoch: 10
 - minibatch size: 150
-- precision: specified by `_low` and `_full` at the end of filename
+- precision: specified by `_g32w32`, `_g32w5` and `_g5w5` at the end of filename
 
 ### Result
-- low precision: 8.24% error rate
-- full precision: 7.94% error rate
+- `_g5w5` precision: 8.04% error rate
+- `_g32w5` precision: 8.24% error rate
+- `_g32w32` precision: 7.94% error rate
 
 ### Instruction for re-running
 For example in file `linear_reg_low.py`, in function `main()`, there are two processes `trainProc()` and `testProc()`. Comment one and run `$python linear_reg_low.py` for either training and testing.
