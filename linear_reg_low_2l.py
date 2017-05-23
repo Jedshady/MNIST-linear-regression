@@ -116,8 +116,8 @@ def trainProc():
     )   # [784 x 500]
     b_1 = np.zeros((1,HK)) # [1 x 500]
 
-    # W_2 = 0.01 * np.random.randn(HK,K) # [500 x 10]
-    W_2 = np.zeros((HK,K)) # [500 x 10]
+    W_2 = 0.01 * np.random.randn(HK,K) # [500 x 10]
+    # W_2 = np.zeros((HK,K)) # [500 x 10]
     b_2 = np.zeros((1,K)) # [1 x 10]
 
     # low precision parameters
@@ -282,7 +282,7 @@ def train(Y, X, W_1, b_1, W_2, b_2, batch_size):
     reg = 2e-4 # regularization strength
 
     hidden_output = np.dot(X, W_1) + b_1
-    hidden_X = activation_tanh(hidden_output)
+    hidden_X = np.tanh(hidden_output)
     scores = np.dot(hidden_X, W_2) + b_2
     # print scores
 
@@ -308,18 +308,13 @@ def train(Y, X, W_1, b_1, W_2, b_2, batch_size):
     dW_2 += reg * W_2 # regularization gradient
 
     dhidden_X = np.dot(dscores, W_2.T)
-    dhidden_output = np.true_divide(dhidden_X, (1 - hidden_X ** 2))
+    dhidden_output = np.multiply(dhidden_X, (1 - hidden_X ** 2))
 
     dW_1 = np.dot(X.T, dhidden_output)
     db_1 = np.sum(dhidden_output, axis=0, keepdims=True)
-    # dW_1 += reg * W_1
+    dW_1 += reg * W_1
 
     return (dW_1, db_1, dW_2, db_2, loss)
-
-def activation_tanh(X):
-    pos = np.exp(X)
-    neg = np.exp(-X)
-    return (pos - neg) / (pos + neg)
 
 def adam(parameter, grad, step_size, m_t, v_t, t):
     beta_1 = 0.9
