@@ -1,0 +1,10 @@
+###########################################
+#epoch number: 10
+#minibatch size: 150
+#precision type: low precision
+###########################################
+epoch  1 : iteration   20 : loss 1.811284
+epoch  1 : iteration   40 : loss 1.345270
+epoch  1 : iteration   60 : loss 1.931313
+epoch  1 : iteration   80 : loss 2.337140
+epoch  1 : iteration  100 : loss nan

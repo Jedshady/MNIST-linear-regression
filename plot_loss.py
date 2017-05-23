@@ -1,5 +1,10 @@
 #!usr/bin/python
 
+# author: Wenkai Jiang
+# date: 22 / 05 / 2017
+# last modified: 22 / 05 / 2017
+# location: NUS
+
 from os import listdir
 from os.path import isfile, join
 

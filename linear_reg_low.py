@@ -2,6 +2,7 @@
 
 # author: Wenkai Jiang
 # date: 21 / 05 / 2017
+# last modified: 22 / 05 / 2017
 # location: NUS
 
 """
@@ -28,7 +29,7 @@ def testProc():
 
     train_epoch = 10
     train_minibatch = 150
-    precision = '_g32w5'
+    precision = '_g32w32_1'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
@@ -125,7 +126,7 @@ def trainProc():
     m_bt = np.zeros((1,K))
     v_bt = m_bt
 
-    precision = '_g5w5'
+    precision = '_g5w5_2'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
 

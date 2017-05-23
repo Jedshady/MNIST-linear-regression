@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 # author: Wenkai Jiang
-# date: 21 / 05 / 2017
-# last modified: 21 / 05 / 2017
+# date: 22 / 05 / 2017
+# last modified: 22 / 05 / 2017
 # location: NUS
 
 """
@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    # trainProc() # for training
-    testProc() # for testing
+    trainProc() # for training
+    # testProc() # for testing
 
 def testProc():
     # read in test data
@@ -29,7 +29,7 @@ def testProc():
 
     train_epoch = 10
     train_minibatch = 150
-    precision = '_full'
+    precision = '_g32w32_2l_1'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
@@ -38,7 +38,7 @@ def testProc():
         log.write('# TEST RESULT' + '\n')
         log.write('# Train epoch number: ' + str(train_epoch) +'\n')
         log.write('# Train minibatch size: ' + str(train_minibatch) + '\n')
-        log.write('# Train precision type: ' + 'full precision' +'\n')
+        log.write('# Train precision type: ' + 'low precision' +'\n')
         log.write('###########################################\n')
 
     D = image.shape[0] * image.shape[1]  # dimenstion 784, image size [28 x 28]
@@ -49,7 +49,7 @@ def testProc():
     # print(label)
     # print(image.shape)
 
-    W,b = np.load(TEST_INFILE)
+    W_1, b_1, W_2, b_2 = np.load(TEST_INFILE)
     error_count = 0.0
     test_minibatch = 100
     start = 0
@@ -68,15 +68,16 @@ def testProc():
             labels[i] = label
             images[i] = newImage
             start += 1
-        error_count += test(labels, images, W, b)
+        error_count += test(labels, images, W_1, b_1, W_2, b_2)
         if (start/minibatch_size) % 5 == 0:
             info = "iteration %d : error_rate %f" % ((start/minibatch_size), error_count / start)
             print info
             with open(TEST_OUTFILE, 'a') as log:
                 log.write(info +'\n')
 
-def test(Y, X, W, b):
-    scores = np.dot(X, W) + b
+def test(Y, X, W_1, b_1, W_2, b_2):
+    hidden_X = np.dot(X, W_1) + b_1
+    scores = np.dot(hidden_X, W_2) + b_2
     # print scores
 
     # get unnormalized probabilities
@@ -100,41 +101,70 @@ def trainProc():
 
     # dimenstion of data
     D = image.shape[0] * image.shape[1]  # dimenstion 784, image size [28 x 28]
+    HK = 500
     K = 10  # number of classes
 
     # full precision parameters
-    W = 0.01 * np.random.randn(D,K) # [784 x 10]
-    b = np.zeros((1,K)) # [1 x 10]
+    rng = np.random.RandomState(1234)
+
+    W_1 = np.asarray(
+        rng.uniform(
+            low = -np.sqrt(6. / (D+HK)),
+            high = np.sqrt(6. / (D+HK)),
+            size = (D, HK)
+        )
+    )   # [784 x 500]
+    b_1 = np.zeros((1,HK)) # [1 x 500]
+
+    # W_2 = 0.01 * np.random.randn(HK,K) # [500 x 10]
+    W_2 = np.zeros((HK,K)) # [500 x 10]
+    b_2 = np.zeros((1,K)) # [1 x 10]
 
     # low precision parameters
-    # W_low = W
-    # b_low = b
+    W_low_1 = W_1
+    b_low_1 = b_1
 
-    # for debug, set a upbound for index of dataset
+    W_low_2 = W_2
+    b_low_2 = b_2
+
+    # set a upbound for index of dataset
     start_max = len(training_data)
-    # start_max = 1
 
     # some hyperparameters
     epoch = 10
     minibatch = 150
+
+    # for debug, set a upbound for index of dataset
+    # start_max = 1
+    # epoch = 1
+    # minibatch = 1
+
     learning_rate = 1e-3
 
     # initialize mt and vt for Adam algorithm
-    m_wt = np.zeros((D,K))
-    v_wt = m_wt
+    m_wt_1 = np.zeros((D,HK))
+    v_wt_1 = m_wt_1
 
-    m_bt = np.zeros((1,K))
-    v_bt = m_bt
+    m_bt_1 = np.zeros((1,HK))
+    v_bt_1 = m_bt_1
 
-    precision = '_full'
+    m_wt_2 = np.zeros((HK,K))
+    v_wt_2 = m_wt_2
+
+    m_bt_2 = np.zeros((1,K))
+    v_bt_2 = m_bt_2
+
+    # precision = '_g5w5_2l_1'
+    precision = '_g32w32_2l_1'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
+    log_step = 20
 
     with open(LOG_OUTFILE, 'a') as log:
         log.write('###########################################\n')
         log.write('#epoch number: ' + str(epoch) +'\n')
         log.write('#minibatch size: ' + str(minibatch) + '\n')
-        log.write('#precision type: ' + 'full precision' +'\n')
+        log.write('#precision type: ' + 'low precision' +'\n')
         log.write('###########################################\n')
 
     loss = 0
@@ -165,35 +195,95 @@ def trainProc():
                 images[j] = newX
                 start += 1
 
+            # ################################################################################
+            # # g5w5
+            # # Below code, where lies the only difference between full precision and low one
+            # # use low precision parameters to get full precision gradients;
+            # # simulate on the worker side
+            # dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, W_low_1, b_low_1, W_low_2, b_low_2, minibatch_size)
+            # loss += loss_temp  # accumulate loss
+            #
+            # # reduce precision of gradients
+            # dW_low_1 = to_low_pcs(dW_1, 5)
+            # db_low_1 = to_low_pcs(db_1, 5)
+            #
+            # dW_low_2 = to_low_pcs(dW_2, 5)
+            # db_low_2 = to_low_pcs(db_2, 5)
+            #
+            # # update parameter with low precision gradients
+            # W_1, m_wt_1, v_wt_1 = adam(W_1, dW_low_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b_1, m_bt_1, v_bt_1 = adam(b_1, db_low_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            #
+            # W_2, m_wt_2, v_wt_2 = adam(W_2, dW_low_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b_2, m_bt_2, v_bt_2 = adam(b_2, db_low_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            #
+            # # Change W and b to low precision; simulate on the server side
+            # W_low_1 = to_low_pcs(W_1, 5)
+            # b_low_1 = to_low_pcs(b_1, 5)
+            #
+            # W_low_2 = to_low_pcs(W_2, 5)
+            # b_low_2 = to_low_pcs(b_2, 5)
+            # ###############################################################################
+
+            # ################################################################################
+            # # g32w5
+            # # Below code, where lies the only difference between full precision and low one
+            # # use low precision parameters to get full precision gradients;
+            # # simulate on the worker side
+            # dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, W_low_1, b_low_1, W_low_2, b_low_2, minibatch_size)
+            # loss += loss_temp  # accumulate loss
+            #
+            # # update parameter with low precision gradients
+            # W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b_1, m_bt_1, v_bt_1 = adam(b_1, db_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            #
+            # W_2, m_wt_2, v_wt_2 = adam(W_2, dW_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b_2, m_bt_2, v_bt_2 = adam(b_2, db_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            #
+            # # Change W and b to low precision; simulate on the server side
+            # W_low_1 = to_low_pcs(W_1, 5)
+            # b_low_1 = to_low_pcs(b_1, 5)
+            #
+            # W_low_2 = to_low_pcs(W_2, 5)
+            # b_low_2 = to_low_pcs(b_2, 5)
+            # ###############################################################################
+            #
             ################################################################################
-            # From line 169 to line 181, where lies the only difference between full precision and low one
+            # g32w32
+            # Below code, where lies the only difference between full precision and low one
             # use low precision parameters to get full precision gradients;
             # simulate on the worker side
-            dW, db, loss_temp= train(labels, images, W, b, minibatch_size)
+            dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, W_1, b_1, W_2, b_2, minibatch_size)
             loss += loss_temp  # accumulate loss
 
-            # perform a parameter update;
-            # simulate on the server side
-            W, m_wt, v_wt = adam(W, dW, learning_rate, m_wt, v_wt, (start_max / minibatch_size)*i+(start/minibatch_size))
-            b, m_bt, v_bt = adam(b, db, learning_rate, m_bt, v_bt, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # update parameter with low precision gradients
+            W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            b_1, m_bt_1, v_bt_1 = adam(b_1, db_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
 
-            # Change W and b to low precision; simulate on the server side
-            # W_low = to_low_pcs(W, 5)
-            # b_low = to_low_pcs(b, 5)
+            W_2, m_wt_2, v_wt_2 = adam(W_2, dW_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            b_2, m_bt_2, v_bt_2 = adam(b_2, db_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
 
-            if (start/minibatch_size) % 20 == 0:
-                info = "epoch %2d : iteration %4d : loss %f" % (i+1, (start/minibatch_size), loss / 20)
+            W_low_1 = W_1
+            b_low_1 = b_1
+            W_low_2 = W_2
+            b_low_2 = b_2
+            ###############################################################################
+
+            if (start/minibatch_size) % log_step == 0:
+                info = "epoch %2d : iteration %4d : loss %f" % (i+1, (start/minibatch_size), loss / log_step)
                 print info
                 with open(LOG_OUTFILE, 'a') as log:
                     log.write(info + '\n')
                 loss = 0
-                np.save(PARAM_OUTFILE, (W,b))   # x,y,z equal sized 1D arrays
+                np.save(PARAM_OUTFILE, (W_low_1, b_low_1, W_low_2, b_low_2))   # x,y,z equal sized 1D arrays
 
-def train(Y, X, W, b, batch_size):
+def train(Y, X, W_1, b_1, W_2, b_2, batch_size):
     # hyperparameters
-    reg = 1e-3 # regularization strength
+    reg = 2e-4 # regularization strength
 
-    scores = np.dot(X, W) + b
+    hidden_output = np.dot(X, W_1) + b_1
+    hidden_X = activation_tanh(hidden_output)
+    scores = np.dot(hidden_X, W_2) + b_2
     # print scores
 
     # get unnormalized probabilities
@@ -204,7 +294,7 @@ def train(Y, X, W, b, batch_size):
     # compute the loss: average cross-entropy loss and regularization
     corect_logprobs = -np.log(probs[range(batch_size), Y]) # [N x 1]
     data_loss = np.sum(corect_logprobs)/batch_size
-    reg_loss = 0.5*reg*np.sum(W * W)
+    reg_loss = 0.5 * reg * ((W_1 ** 2).sum() + (W_2 ** 2).sum())
     loss = data_loss + reg_loss
 
     # compute the gradient on scores
@@ -213,12 +303,23 @@ def train(Y, X, W, b, batch_size):
     dscores /= batch_size
 
     # backpropate the gradient to the parameters (W,b)
-    dW = np.dot(X.T, dscores)
-    db = np.sum(dscores, axis=0, keepdims=True)
-    dW += reg * W # regularization gradient
+    dW_2 = np.dot(hidden_X.T, dscores)
+    db_2 = np.sum(dscores, axis=0, keepdims=True)
+    dW_2 += reg * W_2 # regularization gradient
 
-    return (dW, db, loss)
+    dhidden_X = np.dot(dscores, W_2.T)
+    dhidden_output = np.true_divide(dhidden_X, (1 - hidden_X ** 2))
 
+    dW_1 = np.dot(X.T, dhidden_output)
+    db_1 = np.sum(dhidden_output, axis=0, keepdims=True)
+    # dW_1 += reg * W_1
+
+    return (dW_1, db_1, dW_2, db_2, loss)
+
+def activation_tanh(X):
+    pos = np.exp(X)
+    neg = np.exp(-X)
+    return (pos - neg) / (pos + neg)
 
 def adam(parameter, grad, step_size, m_t, v_t, t):
     beta_1 = 0.9
