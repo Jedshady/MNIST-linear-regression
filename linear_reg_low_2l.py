@@ -19,16 +19,16 @@ import math
 
 def main():
     # comment to leave only one line
-    trainProc() # for training
-    # testProc() # for testing
+    # trainProc() # for training
+    testProc() # for testing
 
 def testProc():
     # read in test data
     testing_data = list(read('testing'))
     label,image = testing_data[0]
 
-    train_epoch = 10
-    train_minibatch = 150
+    train_epoch = 1000
+    train_minibatch = 20
     precision = '_g32w32_2l_1'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
@@ -76,11 +76,13 @@ def testProc():
                 log.write(info +'\n')
 
 def test(Y, X, W_1, b_1, W_2, b_2):
-    hidden_X = np.dot(X, W_1) + b_1
+    hidden_output = np.dot(X, W_1) + b_1
+    hidden_X = np.tanh(hidden_output)
     scores = np.dot(hidden_X, W_2) + b_2
     # print scores
 
     # get unnormalized probabilities
+    scores = scores - scores.max(axis=1, keepdims=True)
     exp_scores = np.exp(scores)
     # normalize them for each example
     probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
@@ -131,8 +133,8 @@ def trainProc():
     start_max = len(training_data)
 
     # some hyperparameters
-    epoch = 10
-    minibatch = 150
+    epoch = 1000
+    minibatch = 20
 
     # for debug, set a upbound for index of dataset
     # start_max = 1
@@ -158,7 +160,7 @@ def trainProc():
     precision = '_g32w32_2l_1'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
-    log_step = 20
+    log_step = 150
 
     with open(LOG_OUTFILE, 'a') as log:
         log.write('###########################################\n')
@@ -283,10 +285,11 @@ def train(Y, X, W_1, b_1, W_2, b_2, batch_size):
 
     hidden_output = np.dot(X, W_1) + b_1
     hidden_X = np.tanh(hidden_output)
-    scores = np.dot(hidden_X, W_2) + b_2
+    scores = np.dot(hidden_X, W_2) + b_2 # [batch_size x class number]
     # print scores
 
     # get unnormalized probabilities
+    scores = scores - scores.max(axis=1, keepdims=True)
     exp_scores = np.exp(scores)
     # normalize them for each example
     probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
