@@ -21,16 +21,18 @@
 - `_g5w5` precision: 8.04% error rate
 - `_g32w5` precision: 8.24% error rate
 - `_g32w32` precision: 7.94% error rate
-![loss plot 1 layer](./loss_plot/loss_1l.png)
+![loss plot 1 layer](./loss_plot/loss_1l.png =100x)
+
 #### 2 layers:
 - `_g5w5` precision: 2.73% error rate
 - `_g32w5` precision: 2.91% error rate
 - `_g32w32` precision: 2.43% error rate
 - `e1000mb20_g32w32` precision: 2.19% error rate
-![loss plot 2 layer](./loss_plot/loss_2l.png)
+![loss plot 2 layer](./loss_plot/loss_2l.png =100x)
+
 #### Feedback Alignment(FA):
 - `_g32w32_2l` precision: 2.75% error rate
-![loss plot fa](./loss_plot/loss_fa.png)
+![loss plot fa](./loss_plot/loss_fa.png =100x)
 
 ### Instruction for re-running
 For example in file `linear_reg_low.py`, in function `main()`, there are two processes `trainProc()` and `testProc()`. Comment one and run `$python linear_reg_low.py` for either training and testing.
