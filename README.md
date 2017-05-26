@@ -21,19 +21,19 @@
 - `_g5w5` precision: 8.04% error rate
 - `_g32w5` precision: 8.24% error rate
 - `_g32w32` precision: 7.94% error rate
-<img src="./loss_plot" alt="loss plot 1 layer" style="width: 100px;"/>
+<img src="./loss_plot/loss_1l.png" alt="loss plot 1 layer" style="width: 50px;"/>
 
 #### 2 layers:
 - `_g5w5` precision: 2.73% error rate
 - `_g32w5` precision: 2.91% error rate
 - `_g32w32` precision: 2.43% error rate
 - `e1000mb20_g32w32` precision: 2.19% error rate
-<img src="./loss_plot/loss_2l.png" alt="loss plot 2 layer" style="width: 100px;"/>
+<img src="./loss_plot/loss_2l.png" alt="loss plot 2 layer" style="width: 50px;"/>
 <!-- ![loss plot 2 layer](./loss_plot/loss_2l.png =100x) -->
 
 #### Feedback Alignment(FA):
 - `_g32w32_2l` precision: 2.75% error rate
-<img src="./loss_plot/loss_fa.png" alt="loss plot fa" style="width: 100px;"/>
+<img src="./loss_plot/loss_fa.png" alt="loss plot fa" style="width: 50px;"/>
 <!-- ![loss plot fa](./loss_plot/loss_fa.png =100x) -->
 
 ### Instruction for re-running
