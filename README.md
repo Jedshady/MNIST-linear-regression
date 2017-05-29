@@ -39,6 +39,7 @@
 ### Random Gradients(RG):
 1. Fixed Random Gradients with Sign Concordant:
 - Vary coefficient scales of `W`:
+
 |No.|gradient scale | W | b | learning rate |
 |:---:|:-------------:|:---:|:---:|:---:|
 |1|uniform [0,1) |0.01||1|1e-3|
