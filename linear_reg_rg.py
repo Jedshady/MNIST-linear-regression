@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    # trainProc() # for training
-    testProc() # for testing
+    trainProc() # for training
+    # testProc() # for testing
 
 def testProc():
     # read in test data
@@ -133,7 +133,7 @@ def trainProc():
     start_max = len(training_data)
 
     # some hyperparameters
-    epoch = 10
+    epoch = 600
     minibatch = 150
 
     # for debug, set a upbound for index of dataset
@@ -141,7 +141,7 @@ def trainProc():
     # epoch = 1
     # minibatch = 1
 
-    learning_rate = 1e-3
+    learning_rate = 1e-4
 
     # initialize mt and vt for Adam algorithm
     m_wt_1 = np.zeros((D,HK))
@@ -189,7 +189,7 @@ def trainProc():
     )   # [1 x 10]
 
     # precision = '_g5w5_2l_1'
-    precision = '_g32w32_2l_rg_4'
+    precision = '_g32w32_2l_rg_7'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
     log_step = 20
@@ -298,11 +298,11 @@ def trainProc():
             db_2_sign = get_sign(db_2)
 
             # iternum = (start_max / minibatch_size)*i+(start/minibatch_size)
-            # if iternum == 2000:
+            # if iternum == 160000:
             #     learning_rate /= 10
-            # elif iternum == 3000:
+            # elif iternum == 200000:
             #     learning_rate /= 10
-            # elif iternum == 3500:
+            # elif iternum == 235000:
             #     learning_rate /= 10
 
             dW_1_new = np.multiply(dW_1_sign, random_gw1)

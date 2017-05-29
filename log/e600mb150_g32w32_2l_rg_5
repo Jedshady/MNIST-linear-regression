@@ -1,0 +1,63 @@
+###########################################
+#epoch number: 600
+#minibatch size: 150
+#precision type: full precision
+#gradients: random gradients
+###########################################
+epoch  1 : iteration   20 : loss 1.925945
+epoch  1 : iteration   40 : loss 1.106363
+epoch  1 : iteration   60 : loss 0.710499
+epoch  1 : iteration   80 : loss 0.562849
+epoch  1 : iteration  100 : loss 0.481993
+epoch  1 : iteration  120 : loss 0.430735
+epoch  1 : iteration  140 : loss 0.429337
+epoch  1 : iteration  160 : loss 0.393516
+epoch  1 : iteration  180 : loss 0.384605
+epoch  1 : iteration  200 : loss 0.414481
+epoch  1 : iteration  220 : loss 0.358263
+epoch  1 : iteration  240 : loss 0.371306
+epoch  1 : iteration  260 : loss 0.358675
+epoch  1 : iteration  280 : loss 0.372861
+epoch  1 : iteration  300 : loss 0.330959
+epoch  1 : iteration  320 : loss 0.349893
+epoch  1 : iteration  340 : loss 0.334916
+epoch  1 : iteration  360 : loss 0.335745
+epoch  1 : iteration  380 : loss 0.316051
+epoch  1 : iteration  400 : loss 0.320872
+epoch  2 : iteration   20 : loss 0.338531
+epoch  2 : iteration   40 : loss 0.323413
+epoch  2 : iteration   60 : loss 0.318806
+epoch  2 : iteration   80 : loss 0.296698
+epoch  2 : iteration  100 : loss 0.327627
+epoch  2 : iteration  120 : loss 0.309590
+epoch  2 : iteration  140 : loss 0.301258
+epoch  2 : iteration  160 : loss 0.317259
+epoch  2 : iteration  180 : loss 0.314756
+epoch  2 : iteration  200 : loss 0.303267
+epoch  2 : iteration  220 : loss 0.296422
+epoch  2 : iteration  240 : loss 0.319258
+epoch  2 : iteration  260 : loss 0.283515
+epoch  2 : iteration  280 : loss 0.290840
+epoch  2 : iteration  300 : loss 0.287507
+epoch  2 : iteration  320 : loss 0.309336
+epoch  2 : iteration  340 : loss 0.307724
+epoch  2 : iteration  360 : loss 0.285453
+epoch  2 : iteration  380 : loss 0.291670
+epoch  2 : iteration  400 : loss 0.302951
+epoch  3 : iteration   20 : loss 0.267389
+epoch  3 : iteration   40 : loss 0.291566
+epoch  3 : iteration   60 : loss 0.277068
+epoch  3 : iteration   80 : loss 0.273836
+epoch  3 : iteration  100 : loss 0.260140
+epoch  3 : iteration  120 : loss 0.255803
+epoch  3 : iteration  140 : loss 0.269903
+epoch  3 : iteration  160 : loss 0.269418
+epoch  3 : iteration  180 : loss 0.253612
+epoch  3 : iteration  200 : loss 0.274244
+epoch  3 : iteration  220 : loss 0.253549
+epoch  3 : iteration  240 : loss 0.264683
+epoch  3 : iteration  260 : loss 0.242911
+epoch  3 : iteration  280 : loss 0.251095
+epoch  3 : iteration  300 : loss 0.257170
+epoch  3 : iteration  320 : loss 0.281583
+epoch  3 : iteration  340 : loss 0.243195
