@@ -40,13 +40,19 @@
 1. Fixed Random Gradients with Sign Concordant:
 - Vary coefficient scales of `W`:
 
-|No.|gradient scale | W | b | learning rate |accuracy|
-|:---:|:-------------:|:---:|:---:|:---:|:---:|
-|`_rg_1`|uniform [0,1) |0.01|1|1e-3|19.5%|
-|`_rg_2`||1|||4.07%|
-|`_rg_3`||0.1|||8.38%|
+|No.|gradient scale | W | b | learning rate |accuracy|loss|
+|:---:|:-------------:|:---:|:---:|:---:|:---:|:---:|
+|`_rg_1`|uniform [0,1) |0.01|1|1e-3|19.5%|1.34|
+|`_rg_2`||1|||4.07%|0.18|
+|`_rg_3`||0.1|||8.38%|0.34|
 
 > learning rate decay by 10 at iteration of No.`2000`, `3000` and `3500`
+
+- Without learning rate decay
+|No.|gradient scale | W | b | learning rate |accuracy|loss|
+|:---:|:-------------:|:---:|:---:|:---:|:---:|:---:|
+|`_rg_4`|uniform [0,1) |1|1|1e-3|3.35%|0.14|
+<img src="./loss_plot/loss_rg.png" alt="loss plot rg" style="width: 50px;"/>
 
 ## Instruction for re-running
 For example in file `linear_reg_low.py`, in function `main()`, there are two processes `trainProc()` and `testProc()`. Comment one and run `$python linear_reg_low.py` for either training and testing.

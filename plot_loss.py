@@ -19,10 +19,14 @@ def main():
     x = np.arange(length)*20
     y_0 = np.array(loss_list[0])
     y_1 = np.array(loss_list[1])
-    y_2 = np.array(loss_list[3])
-    plt.plot(x, y_0, 'r', label='g32w32_2l_fa')
-    plt.plot(x, y_1, 'b', label='g32w32_2l')
-    plt.plot(x, y_2, 'g', label='g32w32_1l')
+    y_2 = np.array(loss_list[2])
+    y_3 = np.array(loss_list[3])
+    
+    plt.plot(x, y_0, 'r', label='rg_1')
+    plt.plot(x, y_1, 'b', label='rg_2')
+    plt.plot(x, y_2, 'g', label='rg_3')
+    plt.plot(x, y_3, 'y', label='rg_4')
+
     plt.legend()
 
     plt.xlabel('Iterations')
@@ -34,7 +38,9 @@ def read():
     files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     loss_list = []
     for filename in files:
-        if filename.split('_')[1] != "g32w32":
+        if len(filename.split('_')) < 4:
+            continue
+        if filename.split('_')[3] != "rg":
             continue
         with open(join(mypath,filename), 'r') as f:
             contents = f.readlines()
