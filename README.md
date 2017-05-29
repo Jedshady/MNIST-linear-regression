@@ -48,10 +48,12 @@
 
 > learning rate decay by 10 at iteration of No.`2000`, `3000` and `3500`
 
-- Without learning rate decay
+- Without learning rate decay:
+
 |No.|gradient scale | W | b | learning rate |accuracy|loss|
 |:---:|:-------------:|:---:|:---:|:---:|:---:|:---:|
 |`_rg_4`|uniform [0,1) |1|1|1e-3|3.35%|0.14|
+
 <img src="./loss_plot/loss_rg.png" alt="loss plot rg" style="width: 50px;"/>
 
 ## Instruction for re-running
