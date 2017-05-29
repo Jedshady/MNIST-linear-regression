@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    trainProc() # for training
-    # testProc() # for testing
+    # trainProc() # for training
+    testProc() # for testing
 
 def testProc():
     # read in test data
@@ -29,7 +29,7 @@ def testProc():
 
     train_epoch = 10
     train_minibatch = 150
-    precision = '_g5w5_2l_fa_1'
+    precision = '_g32w32_2l_rg_4'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
@@ -122,16 +122,6 @@ def trainProc():
     # W_2 = np.zeros((HK,K)) # [500 x 10]
     b_2 = np.zeros((1,K)) # [1 x 10]
 
-    B = np.asarray(
-        rng.normal(
-            loc = 0,
-            scale = 0.2,
-            size = (HK, K)
-        )
-    )
-
-    B_low = to_low_pcs(B, 5)
-
     # low precision parameters
     W_low_1 = W_1
     b_low_1 = b_1
@@ -166,8 +156,40 @@ def trainProc():
     m_bt_2 = np.zeros((1,K))
     v_bt_2 = m_bt_2
 
+    random_gw1 = np.asarray(
+        rng.uniform(
+            low = 0,
+            high = 1,
+            size = (D, HK)
+        )
+    )   # [784 x 500]
+
+    random_gw2 = np.asarray(
+        rng.uniform(
+            low = 0,
+            high = 1,
+            size = (HK, K)
+        )
+    )   # [500 x 10]
+
+    random_gb1 = np.asarray(
+        rng.uniform(
+            low = 0,
+            high = 1,
+            size = (1, HK)
+        )
+    )   # [1 x 500]
+
+    random_gb2 = np.asarray(
+        rng.uniform(
+            low = 0,
+            high = 1,
+            size = (1, K)
+        )
+    )   # [1 x 10]
+
     # precision = '_g5w5_2l_1'
-    precision = '_g5w5_2l_fa_1'
+    precision = '_g32w32_2l_rg_4'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
     log_step = 20
@@ -176,7 +198,8 @@ def trainProc():
         log.write('###########################################\n')
         log.write('#epoch number: ' + str(epoch) +'\n')
         log.write('#minibatch size: ' + str(minibatch) + '\n')
-        log.write('#precision type: ' + 'low precision' +'\n')
+        log.write('#precision type: ' + 'full precision' +'\n')
+        log.write('#gradients: ' + 'random gradients' + '\n')
         log.write('###########################################\n')
 
     loss = 0
@@ -207,35 +230,35 @@ def trainProc():
                 images[j] = newX
                 start += 1
 
-            ################################################################################
-            # g5w5
-            # Below code, where lies the only difference between full precision and low one
-            # use low precision parameters to get full precision gradients;
-            # simulate on the worker side
-            dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, B_low, W_low_1, b_low_1, W_low_2, b_low_2, minibatch_size)
-            loss += loss_temp  # accumulate loss
-
-            # reduce precision of gradients
-            dW_low_1 = to_low_pcs(dW_1, 5)
-            db_low_1 = to_low_pcs(db_1, 5)
-
-            dW_low_2 = to_low_pcs(dW_2, 5)
-            db_low_2 = to_low_pcs(db_2, 5)
-
-            # update parameter with low precision gradients
-            W_1, m_wt_1, v_wt_1 = adam(W_1, dW_low_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
-            b_1, m_bt_1, v_bt_1 = adam(b_1, db_low_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
-
-            W_2, m_wt_2, v_wt_2 = adam(W_2, dW_low_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
-            b_2, m_bt_2, v_bt_2 = adam(b_2, db_low_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
-
-            # Change W and b to low precision; simulate on the server side
-            W_low_1 = to_low_pcs(W_1, 5)
-            b_low_1 = to_low_pcs(b_1, 5)
-
-            W_low_2 = to_low_pcs(W_2, 5)
-            b_low_2 = to_low_pcs(b_2, 5)
-            ###############################################################################
+            # ################################################################################
+            # # g5w5
+            # # Below code, where lies the only difference between full precision and low one
+            # # use low precision parameters to get full precision gradients;
+            # # simulate on the worker side
+            # dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, W_low_1, b_low_1, W_low_2, b_low_2, minibatch_size)
+            # loss += loss_temp  # accumulate loss
+            #
+            # # reduce precision of gradients
+            # dW_low_1 = to_low_pcs(dW_1, 5)
+            # db_low_1 = to_low_pcs(db_1, 5)
+            #
+            # dW_low_2 = to_low_pcs(dW_2, 5)
+            # db_low_2 = to_low_pcs(db_2, 5)
+            #
+            # # update parameter with low precision gradients
+            # W_1, m_wt_1, v_wt_1 = adam(W_1, dW_low_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b_1, m_bt_1, v_bt_1 = adam(b_1, db_low_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
+            #
+            # W_2, m_wt_2, v_wt_2 = adam(W_2, dW_low_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            # b_2, m_bt_2, v_bt_2 = adam(b_2, db_low_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
+            #
+            # # Change W and b to low precision; simulate on the server side
+            # W_low_1 = to_low_pcs(W_1, 5)
+            # b_low_1 = to_low_pcs(b_1, 5)
+            #
+            # W_low_2 = to_low_pcs(W_2, 5)
+            # b_low_2 = to_low_pcs(b_2, 5)
+            # ###############################################################################
 
             # ################################################################################
             # # g32w5
@@ -260,26 +283,51 @@ def trainProc():
             # b_low_2 = to_low_pcs(b_2, 5)
             # ###############################################################################
             #
-            # ################################################################################
-            # # g32w32
-            # # Below code, where lies the only difference between full precision and low one
-            # # use low precision parameters to get full precision gradients;
-            # # simulate on the worker side
-            # dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, B, W_1, b_1, W_2, b_2, minibatch_size)
-            # loss += loss_temp  # accumulate loss
-            #
-            # # update parameter with low precision gradients
+            ################################################################################
+            # g32w32
+            # Below code, where lies the only difference between full precision and low one
+            # use low precision parameters to get full precision gradients;
+            # simulate on the worker side
+            dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, W_1, b_1, W_2, b_2, minibatch_size)
+            loss += loss_temp  # accumulate loss
+
+            # print db_2
+            dW_1_sign = get_sign(dW_1)
+            db_1_sign = get_sign(db_1)
+            dW_2_sign = get_sign(dW_2)
+            db_2_sign = get_sign(db_2)
+
+            # iternum = (start_max / minibatch_size)*i+(start/minibatch_size)
+            # if iternum == 2000:
+            #     learning_rate /= 10
+            # elif iternum == 3000:
+            #     learning_rate /= 10
+            # elif iternum == 3500:
+            #     learning_rate /= 10
+
+            dW_1_new = np.multiply(dW_1_sign, random_gw1)
+            db_1_new = np.multiply(db_1_sign, random_gb1)
+            dW_2_new = np.multiply(dW_2_sign, random_gw2)
+            db_2_new = np.multiply(db_2_sign, random_gb2)
+            # print db_2_new
+
+            W_1 += -learning_rate * dW_1_new
+            b_1 += -learning_rate * db_1_new
+            W_2 += -learning_rate * dW_2_new
+            b_2 += -learning_rate * db_2_new
+
+            # update parameter with low precision gradients
             # W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
             # b_1, m_bt_1, v_bt_1 = adam(b_1, db_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size)*i+(start/minibatch_size))
             #
             # W_2, m_wt_2, v_wt_2 = adam(W_2, dW_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
             # b_2, m_bt_2, v_bt_2 = adam(b_2, db_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size)*i+(start/minibatch_size))
-            #
-            # W_low_1 = W_1
-            # b_low_1 = b_1
-            # W_low_2 = W_2
-            # b_low_2 = b_2
-            # ###############################################################################
+
+            W_low_1 = W_1
+            b_low_1 = b_1
+            W_low_2 = W_2
+            b_low_2 = b_2
+            ###############################################################################
 
             if (start/minibatch_size) % log_step == 0:
                 info = "epoch %2d : iteration %4d : loss %f" % (i+1, (start/minibatch_size), loss / log_step)
@@ -289,7 +337,19 @@ def trainProc():
                 loss = 0
                 np.save(PARAM_OUTFILE, (W_low_1, b_low_1, W_low_2, b_low_2))   # x,y,z equal sized 1D arrays
 
-def train(Y, X, B, W_1, b_1, W_2, b_2, batch_size):
+def get_sign(G):
+    for x in np.nditer(G, op_flags=['readwrite']):
+        sign = 1
+        if x < 0:
+            sign = -1
+        elif x == 0:
+            sign = 0
+
+        x[...] = sign
+
+    return G
+
+def train(Y, X, W_1, b_1, W_2, b_2, batch_size):
     # hyperparameters
     reg = 2e-4 # regularization strength
 
@@ -320,7 +380,7 @@ def train(Y, X, B, W_1, b_1, W_2, b_2, batch_size):
     db_2 = np.sum(dscores, axis=0, keepdims=True)
     dW_2 += reg * W_2 # regularization gradient
 
-    dhidden_X = np.dot(dscores, B.T)
+    dhidden_X = np.dot(dscores, W_2.T)
     dhidden_output = np.multiply(dhidden_X, (1 - hidden_X ** 2))
 
     dW_1 = np.dot(X.T, dhidden_output)
