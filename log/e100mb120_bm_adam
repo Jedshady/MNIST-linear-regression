@@ -1,0 +1,8 @@
+###########################################
+#epoch number: 100
+#minibatch size: 120
+#precision type: full precision
+#gradients update rule: BM_Adam
+###########################################
+epoch  1 : iter   50 : loss 1.045689 : vld 0.126812
+epoch  1 : iter  100 : loss 0.422089 : vld 0.107815

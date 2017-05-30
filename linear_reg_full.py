@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    # trainProc() # for training
-    testProc() # for testing
+    trainProc() # for training
+    # testProc() # for testing
 
 def testProc():
     # read in test data

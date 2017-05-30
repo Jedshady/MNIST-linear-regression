@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    # trainProc() # for training
-    testProc() # for testing
+    trainProc() # for training
+    # testProc() # for testing
 
 def testProc():
     # read in test data
@@ -133,8 +133,8 @@ def trainProc():
     start_max = len(training_data)
 
     # some hyperparameters
-    epoch = 1000
-    minibatch = 20
+    epoch = 10
+    minibatch = 150
 
     # for debug, set a upbound for index of dataset
     # start_max = 1
@@ -157,16 +157,16 @@ def trainProc():
     v_bt_2 = m_bt_2
 
     # precision = '_g5w5_2l_1'
-    precision = '_g32w32_2l_1'
+    precision = '_sgd'
     PARAM_OUTFILE = './exp_result/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
     LOG_OUTFILE = './log/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
-    log_step = 150
+    log_step = 20
 
     with open(LOG_OUTFILE, 'a') as log:
         log.write('###########################################\n')
         log.write('#epoch number: ' + str(epoch) +'\n')
         log.write('#minibatch size: ' + str(minibatch) + '\n')
-        log.write('#precision type: ' + 'low precision' +'\n')
+        log.write('#precision type: ' + 'full precision' +'\n')
         log.write('###########################################\n')
 
     loss = 0
@@ -180,8 +180,8 @@ def trainProc():
         # iterate on all data at size of minibatch size
         while start < start_max:
             # in case number of data can not divided by minibatch size
-            if len(training_data)-start+1 < minibatch_size:
-                minibatch_size = len(training_data)-start+1
+            # if len(training_data)-start+1 < minibatch_size:
+            #     minibatch_size = len(training_data)-start+1
 
             # images -> X, labels -> Y
             images = np.zeros((minibatch_size,D)) # data matrix (each row = single example)
@@ -257,6 +257,12 @@ def trainProc():
             # simulate on the worker side
             dW_1, db_1, dW_2, db_2, loss_temp= train(labels, images, W_1, b_1, W_2, b_2, minibatch_size)
             loss += loss_temp  # accumulate loss
+
+            # SGD
+            # W_1 += -learning_rate * dW_1
+            # b_1 += -learning_rate * db_1
+            # W_2 += -learning_rate * dW_2
+            # b_2 += -learning_rate * db_2
 
             # update parameter with low precision gradients
             W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size)*i+(start/minibatch_size))

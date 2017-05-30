@@ -1,0 +1,16 @@
+###########################################
+#epoch number: 100
+#minibatch size: 120
+#precision type: full precision
+#gradients update rule: BM_Scale_Momentum_Decay
+###########################################
+epoch  1 : iter   50 : loss 1.778870 : vld 0.208132
+epoch  1 : iter  100 : loss 1.027090 : vld 0.272788
+epoch  1 : iter  150 : loss 0.881936 : vld 0.265122
+epoch  1 : iter  200 : loss 0.755248 : vld 0.223963
+epoch  1 : iter  250 : loss 0.686857 : vld 0.221463
+epoch  1 : iter  300 : loss 0.634649 : vld 0.204466
+epoch  1 : iter  350 : loss 0.614536 : vld 0.198967
+epoch  1 : iter  400 : loss 0.579251 : vld 0.166139
+epoch  1 : iter  450 : loss 0.561203 : vld 0.172471
+epoch  2 : iter   50 : loss 0.537107 : vld 0.147809
