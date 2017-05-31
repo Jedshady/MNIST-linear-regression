@@ -6,15 +6,7 @@
 3. `log`:  log files record loss in different epochs and iterations
 4. `test_result`: testing results; stores *error rate* on test data set
 5. `loss_plot`: plotting the loss for different numbe of layers
-
-## Basic experiment settings for now
-- total training data points: 60000
-- total testing data points: 10000
-- epoch: 10 or 1000
-- minibatch size: 150 or 20
-- precision: specified by `_g32w32`, `_g32w5` and `_g5w5` at the end of filename
-- models: specified by `_2l` or nothing as for 2 layers or 1 layer
-- experiment id: specified by the last number to represent duplicate exp with same hyperparameters
+6. `code`: different code for different experiments
 
 ## Result
 ### Test 1:
@@ -65,6 +57,8 @@
 |`_rg_4`|uniform [0,1)  | 1    |1     | 1e-3          |3.35%   |0.14 |
 
 <!-- <img src="./loss_plot/loss_rg.png" alt="loss plot rg" style="width: 50px;"/> -->
+
+-----------------------------
 
 ### Test 2:
 #### Basic Experiment Setting:
