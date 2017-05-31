@@ -19,17 +19,17 @@ import math
 
 def main():
     # comment to leave only one line
-    trainProc() # for training
-    # testProc() # for testing
+    # trainProc() # for training
+    testProc() # for testing
 
 def testProc():
     # read in test data
     testing_data = list(read('testing'))
     label,image = testing_data[0]
 
-    train_epoch = 1000
-    train_minibatch = 20
-    precision = '_g32w32_2l_1'
+    train_epoch = 100
+    train_minibatch = 120
+    precision = '_bm_adam'
     TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
     TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
