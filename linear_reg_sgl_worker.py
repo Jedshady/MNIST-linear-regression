@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    # trainProc() # for training
-    testProc() # for testing
+    trainProc() # for training
+    # testProc() # for testing
 
 def testProc():
     # read in test data
@@ -281,10 +281,10 @@ def trainProc():
             # --------------------------------------------------------
 
             # 2. SGD_Momentum_Decay
-            # dW_1 = dW_1 - mmt * dW_1_last + decay * W_1
-            # db_1 = db_1 - mmt * db_1_last + decay * b_1
-            # dW_2 = dW_2 - mmt * dW_2_last + decay * W_2
-            # db_2 = db_2 - mmt * db_2_last + decay * b_2
+            # dW_1 = dW_1 + mmt * dW_1_last + decay * W_1
+            # db_1 = db_1 + mmt * db_1_last
+            # dW_2 = dW_2 + mmt * dW_2_last + decay * W_2
+            # db_2 = db_2 + mmt * db_2_last
             #
             # W_1 += -learning_rate * dW_1
             # b_1 += -learning_rate * db_1
@@ -303,10 +303,10 @@ def trainProc():
             # dW_2_sign = get_sign(dW_2)
             # db_2_sign = get_sign(db_2)
             #
-            # dW_1 = dW_1_sign - mmt * dW_1_last + decay * W_1
-            # db_1 = db_1_sign - mmt * db_1_last + decay * b_1
-            # dW_2 = dW_2_sign - mmt * dW_2_last + decay * W_2
-            # db_2 = db_2_sign - mmt * db_2_last + decay * b_2
+            # dW_1 = dW_1_sign + mmt * dW_1_last + decay * W_1
+            # db_1 = db_1_sign + mmt * db_1_last
+            # dW_2 = dW_2_sign + mmt * dW_2_last + decay * W_2
+            # db_2 = db_2_sign + mmt * db_2_last
             #
             # W_1 += -learning_rate * dW_1
             # b_1 += -learning_rate * db_1
@@ -330,10 +330,10 @@ def trainProc():
             # dW_2_new = np.multiply(dW_2_sign, random_gw2)
             # db_2_new = np.multiply(db_2_sign, random_gb2)
             #
-            # dW_1 = dW_1_new - mmt * dW_1_last + decay * W_1
-            # db_1 = db_1_new - mmt * db_1_last + decay * b_1
-            # dW_2 = dW_2_new - mmt * dW_2_last + decay * W_2
-            # db_2 = db_2_new - mmt * db_2_last + decay * b_2
+            # dW_1 = dW_1_new + mmt * dW_1_last + decay * W_1
+            # db_1 = db_1_new + mmt * db_1_last
+            # dW_2 = dW_2_new + mmt * dW_2_last + decay * W_2
+            # db_2 = db_2_new + mmt * db_2_last
             #
             # W_1 += -learning_rate * dW_1
             # b_1 += -learning_rate * db_1

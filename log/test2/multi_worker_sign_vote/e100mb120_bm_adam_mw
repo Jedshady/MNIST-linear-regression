@@ -1,0 +1,10 @@
+###########################################
+#epoch number: 100
+#minibatch size: 120
+#precision type: full precision
+#training mode: multi workers
+#aggregate mode: majority vote
+#gradients update rule: BM_Adam
+###########################################
+epoch  1 : iter   10 : loss 1.902712 : vld 0.217630
+epoch  1 : iter   20 : loss 1.067419 : vld 0.180470

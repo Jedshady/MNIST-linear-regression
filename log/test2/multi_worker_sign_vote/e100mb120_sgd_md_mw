@@ -1,0 +1,13 @@
+###########################################
+#epoch number: 100
+#minibatch size: 120
+#precision type: full precision
+#training mode: multi workers
+#aggregate mode: majority vote
+#gradients update rule: SGD_Momentum_Decay
+###########################################
+epoch  1 : iter   10 : loss 2.350521 : vld 0.817530
+epoch  1 : iter   20 : loss 2.309851 : vld 0.609565
+epoch  1 : iter   30 : loss 2.250879 : vld 0.479920
+epoch  1 : iter   40 : loss 2.191876 : vld 0.403933
+epoch  1 : iter   50 : loss 2.129029 : vld 0.357774
