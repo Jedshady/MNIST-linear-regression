@@ -78,16 +78,45 @@
 5. Batch Manhattan with Adam (BM_Adam)
 
 #### Result:
+1. Single Worker:
+
 <img src="./loss_plot/test2/lr_1e-3/test2_loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/lr_1e-3/test2_vld_error.png" alt="vld plot test2" style="width: 50px;"/>
 
 |Training Method   | Error Rate on Testset |
 |:-------  |:-------------:|
-|`SGD`|8.76% |
-|`SGD_md`|  10.02%             |
-|`BM_md`|         4.71%      |
-|`BM_Scale_md`| 3.61%|
-|`BM_Adam`| 2.52%|
+|`SGD`|8.68% |
+|`SGD_md`|  4.41%             |
+|`BM_md`|         8.73%      |
+|`BM_Scale_md`| 4.55%|
+|`BM_Adam`| 2.98%|
+
+2. Simulate Multi Workers using average aggregation:
+
+<img src="./loss_plot/test2/multi_worker_avg/loss.png" alt="loss plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/multi_worker_avg/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
+
+|Training Method   | Error Rate on Testset |
+|:-------  |:-------------:|
+|`SGD`|12.29% |
+|`SGD_md`|  7.85%             |
+|`BM_md`|         2.98%      |
+|`BM_Scale_md`| 2.78%|
+|`BM_Adam`| 2.39%|
+
+
+3. Simulate Multi Workers using Majority Vote on Sign:
+
+<img src="./loss_plot/test2/multi_worker_sign_vote/loss.png" alt="loss plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/multi_worker_sign_vote/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
+
+|Training Method   | Error Rate on Testset |
+|:-------  |:-------------:|
+|`SGD`| 11.51% |
+|`SGD_md`|  7.21%             |
+|`BM_md`|         3.96%      |
+|`BM_Scale_md`| 2.92%|
+|`BM_Adam`| 2.31%|
 
 ## Instruction for re-running
 For example in file `linear_reg_low.py`, in function `main()`, there are two processes `trainProc()` and `testProc()`. Comment one and run `$python linear_reg_low.py` for either training and testing.

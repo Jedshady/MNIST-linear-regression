@@ -19,8 +19,8 @@ import math
 
 def main():
     # comment to leave only one line
-    trainProc() # for training
-    # testProc() # for testing
+    # trainProc() # for training
+    testProc() # for testing
 
 def testProc():
     # read in test data
@@ -29,9 +29,9 @@ def testProc():
 
     train_epoch = 100
     train_minibatch = 120
-    precision = '_bm_adam'
-    TEST_INFILE = './exp_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
-    TEST_OUTFILE = './test_result/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
+    precision = '_bm_adam_mw'
+    TEST_INFILE = './exp_result/test2/multi_worker_sign_vote/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
+    TEST_OUTFILE = './test_result/test2/multi_worker_sign_vote/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
     with open(TEST_OUTFILE, 'a') as log:
         log.write('###########################################\n')
