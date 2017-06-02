@@ -80,8 +80,8 @@
 #### Result:
 1. Single Worker:
 
-<img src="./loss_plot/test2/lr_1e-3/test2_loss.png" alt="loss plot test2" style="width: 50px;"/>
-<img src="./loss_plot/test2/lr_1e-3/test2_vld_error.png" alt="vld plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/lr_1e-3/loss.png" alt="loss plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/lr_1e-3/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
 
 |Training Method   | Error Rate on Testset |
 |:-------  |:-------------:|
