@@ -79,7 +79,7 @@
 
 #### Result:
 -------------------------------
-Single Worker:
+####Single Worker:
 
 <img src="./loss_plot/test2/lr_1e-3/loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/lr_1e-3/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
@@ -93,7 +93,7 @@ Single Worker:
 |`BM_Adam`| 2.98%|
 
 --------------------------------
-Simulate Multi Workers using average aggregation:
+####Simulate Multi Workers using average aggregation:
 
 1.Experiment Setting 1
 
@@ -132,7 +132,7 @@ Simulate Multi Workers using average aggregation:
 
 
 -----------------------------------
-Simulate Multi Workers using Majority Vote on Sign:
+####Simulate Multi Workers using Majority Vote on Sign:
 
 1.Experiment Setting 1
 
