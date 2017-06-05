@@ -78,7 +78,7 @@
 5. Batch Manhattan with Adam (BM_Adam)
 
 #### Result:
-1. Single Worker:
+####1. Single Worker:
 
 <img src="./loss_plot/test2/lr_1e-3/loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/lr_1e-3/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
@@ -91,7 +91,7 @@
 |`BM_Scale_md`| 4.55%|
 |`BM_Adam`| 2.98%|
 
-2. Simulate Multi Workers using average aggregation:
+####2. Simulate Multi Workers using average aggregation:
 
 2.1 Experiment Setting 1
 
