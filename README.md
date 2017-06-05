@@ -94,11 +94,10 @@
 2. Simulate Multi Workers using average aggregation:
 
 2.1 Experiment Setting 1
----
-Workers Num = 5
-Epoch Num = 100
-Minibatch Size per worker = 120
----
+
+	Workers Num = 5
+	Epoch Num = 100
+	Minibatch Size per worker = 120
 
 <img src="./loss_plot/test2/multi_worker_avg/loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/multi_worker_avg/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
@@ -111,15 +110,12 @@ Minibatch Size per worker = 120
 |`BM_Scale_md`| 2.78%|
 |`BM_Adam`| 2.39%|
 
-================================
 
 2.2 Experiment Setting 2
 
----
-Workers Num = 3
-Epoch Num = 100
-Minibatch Size per worker = 40
----
+	Workers Num = 3
+	Epoch Num = 100
+	Minibatch Size per worker = 40
 
 <img src="./loss_plot/test2/3_worker_avg/loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/3_worker_avg/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
@@ -137,11 +133,11 @@ Minibatch Size per worker = 40
 3. Simulate Multi Workers using Majority Vote on Sign:
 
 3.1 Experiment Setting 1
----
-Workers Num = 5
-Epoch Num = 100
-Minibatch Size per worker = 120
----
+
+	Workers Num = 5
+	Epoch Num = 100
+	Minibatch Size per worker = 120
+
 
 <img src="./loss_plot/test2/multi_worker_sign_vote/loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/multi_worker_sign_vote/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
@@ -155,15 +151,11 @@ Minibatch Size per worker = 120
 |`BM_Adam`| 2.31%|
 
 
-================================
-
 3.2 Experiment Setting 2
 
----
-Workers Num = 3
-Epoch Num = 100
-Minibatch Size per worker = 40
----
+	Workers Num = 3
+	Epoch Num = 100
+	Minibatch Size per worker = 40
 
 <img src="./loss_plot/test2/3_worker_avg/loss.png" alt="loss plot test2" style="width: 50px;"/>
 <img src="./loss_plot/test2/3_worker_avg/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>

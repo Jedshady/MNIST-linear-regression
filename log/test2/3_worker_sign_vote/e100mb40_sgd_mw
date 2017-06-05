@@ -733,3 +733,4 @@ epoch 81 : iter  200 : loss 0.383948 : vld 0.096651
 epoch 81 : iter  250 : loss 0.387581 : vld 0.097484
 epoch 81 : iter  300 : loss 0.386809 : vld 0.097650
 epoch 81 : iter  350 : loss 0.394031 : vld 0.096817
+epoch 81 : iter  400 : loss 0.395101 : vld 0.096984
