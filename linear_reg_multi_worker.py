@@ -28,10 +28,10 @@ def testProc():
     label,image = testing_data[0]
 
     train_epoch = 100
-    train_minibatch = 120
+    train_minibatch = 40
     precision = '_bm_adam_mw'
-    TEST_INFILE = './exp_result/test2/multi_worker_sign_vote/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
-    TEST_OUTFILE = './test_result/test2/multi_worker_sign_vote/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
+    TEST_INFILE = './exp_result/test2/3_worker_avg/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
+    TEST_OUTFILE = './test_result/test2/3_worker_avg/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
     with open(TEST_OUTFILE, 'a') as log:
         log.write('###########################################\n')
@@ -152,7 +152,7 @@ def trainProc():
 
     # some hyperparameters
     epoch = 100
-    minibatch = 120
+    minibatch = 40
 
     # for debug, set a upbound for index of dataset
     # start_max = 1
@@ -214,13 +214,13 @@ def trainProc():
     dW_2_last = np.zeros((HK, K))
     db_2_last = np.zeros((1, K))
 
-    worker_num = 5
+    worker_num = 3
 
     # precision = '_g5w5_2l_1'
     precision = '_bm_adam_mw'
-    PARAM_OUTFILE = './exp_result/test2/multi_worker_sign_vote/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
-    LOG_OUTFILE = './log/test2/multi_worker_sign_vote/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
-    log_step = 10
+    PARAM_OUTFILE = './exp_result/test2/3_worker_avg/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
+    LOG_OUTFILE = './log/test2/3_worker_avg/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
+    log_step = 50
 
     with open(LOG_OUTFILE, 'a') as log:
         log.write('###########################################\n')
@@ -346,7 +346,7 @@ def trainProc():
             # 2. SGD_Momentum_Decay update
             # dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
             # dW_1,db_1,dW_2,db_2 = aggregate_vote(workers, worker_num)
-            #
+
             # W_1 += -learning_rate * dW_1
             # b_1 += -learning_rate * db_1
             # W_2 += -learning_rate * dW_2
@@ -389,9 +389,9 @@ def trainProc():
             #----------------------------------------------------------------
 
             # 5. BM_Adam
-            # dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
-            dW_1,db_1,dW_2,db_2 = aggregate_vote(workers, worker_num)
-
+            dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
+            # dW_1,db_1,dW_2,db_2 = aggregate_vote(workers, worker_num)
+            #
             # update parameter with low precision gradients
             W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
             b_1, m_bt_1, v_bt_1 = adam(b_1, db_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
@@ -421,7 +421,7 @@ def aggregate_avg(worker, num):
         dW_2 = np.add(dW_2, worker[i][2])
         db_2 = np.add(db_2, worker[i][3])
 
-    return (dW_1/5,db_1/5,dW_2/5, db_2/5)
+    return (dW_1/num,db_1/num,dW_2/num, db_2/num)
 
 def aggregate_vote(worker, num):
     W_1_list = []
