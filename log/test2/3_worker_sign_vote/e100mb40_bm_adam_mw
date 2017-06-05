@@ -479,3 +479,4 @@ epoch 53 : iter  100 : loss 0.442675 : vld 0.042826
 epoch 53 : iter  150 : loss 0.462870 : vld 0.040827
 epoch 53 : iter  200 : loss 0.474541 : vld 0.038994
 epoch 53 : iter  250 : loss 0.475002 : vld 0.043659
+epoch 53 : iter  300 : loss 0.456430 : vld 0.046159
