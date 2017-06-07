@@ -130,6 +130,22 @@
 |`BM_Scale_md`| 5.66%|
 |`BM_Adam`| 4.77%|
 
+3.Experiment Setting 3
+
+	Workers Num = 3
+	Epoch Num = 100
+	Minibatch Size per worker = 80
+
+<img src="./loss_plot/test2/3_worker_avg_2/loss.png" alt="loss plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/3_worker_avg_2/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
+
+|Training Method   | Error Rate on Testset |
+|:-------  |:-------------:|
+|`SGD`|9.65% |
+|`SGD_md`|  6.3%             |
+|`BM_md`|   4.38%      |
+|`BM_Scale_md`| 3.42%|
+|`BM_Adam`| 3.48%|
 
 -----------------------------------
 #### Simulate Multi Workers using Majority Vote on Sign:
@@ -159,16 +175,16 @@
 	Epoch Num = 100
 	Minibatch Size per worker = 40
 
-<img src="./loss_plot/test2/3_worker_avg/loss.png" alt="loss plot test2" style="width: 50px;"/>
-<img src="./loss_plot/test2/3_worker_avg/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/3_worker_sign_vote/loss.png" alt="loss plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/3_worker_sign_vote/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
 
 |Training Method   | Error Rate on Testset |
 |:-------  |:-------------:|
-|`SGD`|8.69% |
-|`SGD_md`|  4.47%             |
-|`BM_md`|         7.42%      |
-|`BM_Scale_md`| 5.66%|
-|`BM_Adam`| 4.77%|
+|`SGD`|8.40% |
+|`SGD_md`|  3.59%             |
+|`BM_md`|         7.46%      |
+|`BM_Scale_md`| 6.27%|
+|`BM_Adam`| 4.44%|
 
 
 ## Instruction for re-running

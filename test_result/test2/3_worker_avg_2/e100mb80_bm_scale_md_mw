@@ -1,0 +1,26 @@
+###########################################
+# TEST RESULT
+# Train epoch number: 100
+# Train minibatch size: 80
+# Train precision type: low precision
+###########################################
+iteration 5 : error_rate 0.032000
+iteration 10 : error_rate 0.035000
+iteration 15 : error_rate 0.044000
+iteration 20 : error_rate 0.046000
+iteration 25 : error_rate 0.049600
+iteration 30 : error_rate 0.049333
+iteration 35 : error_rate 0.045714
+iteration 40 : error_rate 0.048500
+iteration 45 : error_rate 0.050222
+iteration 50 : error_rate 0.049000
+iteration 55 : error_rate 0.045273
+iteration 60 : error_rate 0.044167
+iteration 65 : error_rate 0.042154
+iteration 70 : error_rate 0.040714
+iteration 75 : error_rate 0.038400
+iteration 80 : error_rate 0.037125
+iteration 85 : error_rate 0.036118
+iteration 90 : error_rate 0.034222
+iteration 95 : error_rate 0.033474
+iteration 100 : error_rate 0.034200

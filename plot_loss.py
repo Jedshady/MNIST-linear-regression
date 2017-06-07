@@ -34,7 +34,7 @@ def main():
     plt.show()
 
 def read():
-    mypath = './log/test2/3_worker_avg/'
+    mypath = './log/test2/3_worker_sign_vote/'
     files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     loss_list = []
     for filename in files:
