@@ -28,10 +28,10 @@ def testProc():
     label,image = testing_data[0]
 
     train_epoch = 100
-    train_minibatch = 40
+    train_minibatch = 15
     precision = '_bm_adam_mw'
-    TEST_INFILE = './exp_result/test2/3_worker_sign_vote/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
-    TEST_OUTFILE = './test_result/test2/3_worker_sign_vote/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
+    TEST_INFILE = './exp_result/test2/8_worker_avg/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision + '.npy'
+    TEST_OUTFILE = './test_result/test2/8_worker_avg/' + 'e' + str(train_epoch) + 'mb' + str(train_minibatch) + precision
 
     with open(TEST_OUTFILE, 'a') as log:
         log.write('###########################################\n')
@@ -152,7 +152,7 @@ def trainProc():
 
     # some hyperparameters
     epoch = 100
-    minibatch = 80
+    minibatch = 30
 
     # for debug, set a upbound for index of dataset
     # start_max = 1
@@ -214,13 +214,13 @@ def trainProc():
     dW_2_last = np.zeros((HK, K))
     db_2_last = np.zeros((1, K))
 
-    worker_num = 3
+    worker_num = 4
 
     # precision = '_g5w5_2l_1'
-    precision = '_sgd_mw'
-    PARAM_OUTFILE = './exp_result/test2/3_worker_avg_2/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
-    LOG_OUTFILE = './log/test2/3_worker_avg_2/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
-    log_step = 25
+    precision = '_bm_adam_mw'
+    PARAM_OUTFILE = './exp_result/test2/4_worker_avg/' + 'e' + str(epoch) + 'mb' + str(minibatch) + precision
+    LOG_OUTFILE = './log/test2/4_worker_avg/'+'e' + str(epoch) + 'mb' + str(minibatch) + precision
+    log_step = 50
 
     with open(LOG_OUTFILE, 'a') as log:
         log.write('###########################################\n')
@@ -229,7 +229,7 @@ def trainProc():
         log.write('#precision type: ' + 'full precision' +'\n')
         log.write('#training mode: ' + 'multi workers' + '\n' )
         log.write('#aggregate mode: ' + 'majority vote' + '\n' )
-        log.write('#gradients update rule: ' + 'SGD' +'\n')
+        log.write('#gradients update rule: ' + 'BM_Adam' +'\n')
         log.write('###########################################\n')
 
     loss = 0
@@ -272,8 +272,8 @@ def trainProc():
 
                 # --------------------------------------------------------
                 # 1. SGD
-                worker = [dW_1, db_1, dW_2, db_2]
-                workers.append(worker)
+                # worker = [dW_1, db_1, dW_2, db_2]
+                # workers.append(worker)
                 # --------------------------------------------------------
 
                 # 2. SGD_Momentum_Decay
@@ -322,25 +322,25 @@ def trainProc():
                 # --------------------------------------------------------
 
                 # 5. BM_Adam
-                # dW_1_sign = get_sign(dW_1)
-                # db_1_sign = get_sign(db_1)
-                # dW_2_sign = get_sign(dW_2)
-                # db_2_sign = get_sign(db_2)
-                #
-                # worker = [dW_1_sign, db_1_sign, dW_2_sign, db_2_sign]
-                # workers.append(worker)
+                dW_1_sign = get_sign(dW_1)
+                db_1_sign = get_sign(db_1)
+                dW_2_sign = get_sign(dW_2)
+                db_2_sign = get_sign(db_2)
+
+                worker = [dW_1_sign, db_1_sign, dW_2_sign, db_2_sign]
+                workers.append(worker)
                 # --------------------------------------------------------
                 ###############################################################################
 
             #----------------------------------------------------------------
             # 1. SGD update
-            dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
-            dW_1,db_1,dW_2,db_2 = aggregate_vote(workers, worker_num)
-
-            W_1 += -learning_rate * dW_1
-            b_1 += -learning_rate * db_1
-            W_2 += -learning_rate * dW_2
-            b_2 += -learning_rate * db_2
+            # dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
+            # dW_1,db_1,dW_2,db_2 = aggregate_vote(workers, worker_num)
+            #
+            # W_1 += -learning_rate * dW_1
+            # b_1 += -learning_rate * db_1
+            # W_2 += -learning_rate * dW_2
+            # b_2 += -learning_rate * db_2
             #----------------------------------------------------------------
 
             # 2. SGD_Momentum_Decay update
@@ -389,14 +389,14 @@ def trainProc():
             #----------------------------------------------------------------
 
             # 5. BM_Adam
-            # dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
+            dW_1,db_1,dW_2,db_2 = aggregate_avg(workers, worker_num)
             # dW_1,db_1,dW_2,db_2 = aggregate_vote(workers, worker_num)
             #
             # update parameter with low precision gradients
-            # W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
-            # b_1, m_bt_1, v_bt_1 = adam(b_1, db_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
-            # W_2, m_wt_2, v_wt_2 = adam(W_2, dW_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
-            # b_2, m_bt_2, v_bt_2 = adam(b_2, db_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
+            W_1, m_wt_1, v_wt_1 = adam(W_1, dW_1, learning_rate, m_wt_1, v_wt_1, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
+            b_1, m_bt_1, v_bt_1 = adam(b_1, db_1, learning_rate, m_bt_1, v_bt_1, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
+            W_2, m_wt_2, v_wt_2 = adam(W_2, dW_2, learning_rate, m_wt_2, v_wt_2, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
+            b_2, m_bt_2, v_bt_2 = adam(b_2, db_2, learning_rate, m_bt_2, v_bt_2, (start_max / minibatch_size/worker_num)*i+(start/minibatch_size/worker_num))
             #----------------------------------------------------------------
 
             if (start/minibatch_size/worker_num) % log_step == 0:
