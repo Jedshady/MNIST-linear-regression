@@ -200,10 +200,10 @@
 |:-------  |:-------------:|
 |`1_worker`| 2.98% |
 |`2_workers`| 3.72%             |
-|`3_workers|         4.77%      |
-|`4_workers| 5.01%|
-|`5_workers| 5.94%|
-|`8_workers| 8.04%|
+|`3_workers`|         4.77%      |
+|`4_workers`| 5.01%|
+|`5_workers`| 5.94%|
+|`8_workers`| 8.04%|
 
 
 ## Instruction for re-running
