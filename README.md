@@ -186,6 +186,25 @@
 |`BM_Scale_md`| 6.27%|
 |`BM_Adam`| 4.44%|
 
+#### Vary number of workers but fix total mini batch size
+	
+	Workers Num = 1, 2, 3, 4, 5, 8
+	Epoch Num = 100
+	Minibatch Size per worker = 120 / Workers Num
+	Weight Updates: BM_Adam
+
+<img src="./loss_plot/test2/vary_worker_num/loss.png" alt="loss plot test2" style="width: 50px;"/>
+<img src="./loss_plot/test2/vary_worker_num/vld_error_rate.png" alt="vld plot test2" style="width: 50px;"/>
+
+|Training Method   | Error Rate on Testset |
+|:-------  |:-------------:|
+|`1_worker`| 2.98% |
+|`2_workers`| 3.72%             |
+|`3_workers|         4.77%      |
+|`4_workers| 5.01%|
+|`5_workers| 5.94%|
+|`8_workers| 8.04%|
+
 
 ## Instruction for re-running
 For example in file `linear_reg_low.py`, in function `main()`, there are two processes `trainProc()` and `testProc()`. Comment one and run `$python linear_reg_low.py` for either training and testing.
